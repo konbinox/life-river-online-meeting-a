@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+  console.log("当前 editor.html URL:", window.location.href);
 <head>
   <meta charset="UTF-8">
   <title>聚會流程編輯器</title>
@@ -326,7 +327,7 @@
       
       async loadMeetingData() {
         try {
-          const response = await fetch('../data/meeting.json');
+          const response = await fetch('./data/meeting.json');
           this.meetingData = await response.json();
         } catch (error) {
           console.error('加载数据失败:', error);
