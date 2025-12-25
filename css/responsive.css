@@ -1,0 +1,214 @@
+/* 响应式设计 */
+
+/* 大屏幕优化 */
+@media (min-width: 1600px) {
+  #sidebar {
+    width: 320px;
+  }
+  
+  #main {
+    padding: 50px 80px;
+  }
+  
+  .page-title {
+    font-size: 4rem;
+  }
+}
+
+/* 平板设备 */
+@media (max-width: 1024px) {
+  #sidebar {
+    width: 240px;
+    padding: 20px 15px;
+  }
+  
+  #main {
+    padding: 30px 40px;
+  }
+  
+  .nav-number {
+    padding: 14px 16px;
+    min-height: 70px;
+  }
+  
+  .number-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    margin-right: 15px;
+  }
+  
+  .page-title {
+    font-size: 2.8rem;
+  }
+  
+  #editor-panel {
+    width: 70vw;
+    min-width: 500px;
+  }
+}
+
+/* 平板竖屏/大手机 */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+  
+  #sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 35vh;
+    border-right: none;
+    border-bottom: 3px solid rgba(241, 196, 15, 0.4);
+    padding: 15px 20px;
+  }
+  
+  #sidebar-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+  
+  .nav-numbers-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  
+  .nav-number {
+    margin-bottom: 0;
+    min-height: 65px;
+  }
+  
+  #main {
+    padding: 20px 25px;
+    height: calc(100vh - 35vh);
+  }
+  
+  #editor-panel {
+    width: 100vw;
+    min-width: 100%;
+    max-width: 100%;
+  }
+  
+  #gear-btn {
+    right: 20px;
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
+
+/* 手机设备 */
+@media (max-width: 480px) {
+  #sidebar {
+    max-height: 40vh;
+    padding: 12px 15px;
+  }
+  
+  .nav-numbers-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-number {
+    padding: 12px 14px;
+    min-height: 60px;
+  }
+  
+  .number-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    margin-right: 12px;
+  }
+  
+  .nav-title {
+    font-size: 15px;
+  }
+  
+  .nav-desc {
+    font-size: 12px;
+  }
+  
+  #main {
+    padding: 15px 20px;
+    height: calc(100vh - 40vh);
+  }
+  
+  .page-title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .section {
+    margin-bottom: 1.5rem;
+  }
+  
+  #toast {
+    font-size: 14px;
+    padding: 10px 20px;
+    bottom: 80px;
+  }
+}
+
+/* 超小屏幕 */
+@media (max-width: 360px) {
+  #sidebar {
+    max-height: 45vh;
+  }
+  
+  #main {
+    padding: 10px 15px;
+    height: calc(100vh - 45vh);
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+}
+
+/* 高分辨率适配 */
+@media (min-resolution: 192dpi) {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0a0a0a;
+  }
+  
+  #sidebar {
+    background: rgba(15, 15, 20, 0.98);
+  }
+}
+
+/* 运动减少偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .nav-number:hover {
+    transform: none;
+  }
+  
+  #gear-btn:hover {
+    transform: none;
+  }
+  
+  .nav-number {
+    min-height: 70px;
+  }
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>重构验证</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .success { color: green; }
+    .error { color: red; }
+    .warning { color: orange; }
+  </style>
+</head>
+<body>
+  <h1>重构验证检查</h1>
+  
+  <div id="results">
+    <h2>文件检查:</h2>
+    <ul id="file-check"></ul>
+    
+    <h2>功能测试:</h2>
+    <ul>
+      <li><a href="index.html" target="_blank">打开主页面</a></li>
+      <li><a href="editor.html" target="_blank">打开编辑器</a></li>
+    </ul>
+  </div>
+  
+  <script>
+    const filesToCheck = [
+      'index.html',
+      'css/main.css',
+      'css/sidebar.css',
+      'css/responsive.css',
+      'js/app.js',
+      'data/meeting.json',
+      'components/page-editor.js',
+      'assets/images/',
+      'editor.html'
+    ];
+    
+    const fileList = document.getElementById('file-check');
+    
+    filesToCheck.forEach(file => {
+      const li = document.createElement('li');
+      li.textContent = file;
+      
+      fetch(file, { method: 'HEAD' })
+        .then(response => {
+          if (response.ok) {
+            li.innerHTML = `${file} <span class="success">✓ 存在</span>`;
+          } else if (file.endsWith('/')) {
+            // 检查目录
+            fetch(file + '.', { method: 'HEAD' })
+              .then(() => li.innerHTML = `${file} <span class="success">✓ 目录存在</span>`)
+              .catch(() => li.innerHTML = `${file} <span class="warning">⚠ 目录可能不存在</span>`);
+          } else {
+            li.innerHTML = `${file} <span class="error">✗ 不存在</span>`;
+          }
+        })
+        .catch(() => {
+          li.innerHTML = `${file} <span class="warning">⚠ 无法访问</span>`;
+        });
+      
+      fileList.appendChild(li);
+    });
+  </script>
+</body>
+</html>

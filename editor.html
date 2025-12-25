@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>聚會流程編輯器</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    
+    /* 页面头部 */
+    .page-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    
+    .page-title i {
+      font-size: 26px;
+    }
+    
+    .page-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-left: 40px;
+    }
+    
+    /* 页码导航 */
+    .page-nav-container {
+      background: white;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border: 1px solid #e9ecef;
+    }
+    
+    .nav-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+    
+    .nav-header i {
+      color: #667eea;
+    }
+    
+    .page-numbers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .page-number-btn {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #dee2e6;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #495057;
+      transition: all 0.2s;
+    }
+    
+    .page-number-btn:hover {
+      border-color: #adb5bd;
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
+    
+    .page-number-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+      box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* 主持人设置区域 */
+    .host-section {
+      background: rgba(255, 255, 255, 0.95);
+      margin: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-left: 5px solid #f1c40f;
+      display: none;
+    }
+    
+    .host-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .host-header i {
+      color: #f1c40f;
+      font-size: 20px;
+    }
+    
+    .host-header h3 {
+      margin: 0;
+      color: #2c3e50;
+    }
+    
+    .host-note {
+      color: #7f8c8d;
+      font-size: 13px;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+    
+    .host-controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .host-select {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+      transition: all 0.3s;
+    }
+    
+    .host-select:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .host-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(241, 196, 15, 0.3);
+    }
+    
+    .host-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(241, 196, 15, 0.4);
+    }
+    
+    .host-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* 动作按钮 */
+    .action-buttons {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: flex;
+      gap: 15px;
+      z-index: 1000;
+    }
+    
+    .action-btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .action-btn.save {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+    }
+    
+    .action-btn.close {
+      background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+      color: white;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    /* 编辑器容器 */
+    #editor-container {
+      padding: 0 20px 100px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    @media (max-width: 768px) {
+      .host-controls {
+        flex-direction: column;
+      }
+      
+      .host-select {
+        min-width: 100%;
+      }
+      
+      .action-buttons {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div class="page-title">
+      <i class="fas fa-edit"></i>
+      <span id="current-page-info">聚會流程編輯器</span>
+    </div>
+    <div class="page-subtitle" id="page-subtitle">
+      選擇頁面進行編輯，第一頁可設置主持人
+    </div>
+  </div>
+  
+  <div class="page-nav-container">
+    <div class="nav-header">
+      <i class="fas fa-file-alt"></i>
+      <span>快速跳轉頁面：</span>
+    </div>
+    <div class="page-numbers" id="page-numbers"></div>
+  </div>
+  
+  <div class="host-section" id="host-section">
+    <div class="host-header">
+      <i class="fas fa-user-tie"></i>
+      <h3>🎤 主持人設置（僅第一頁可用）</h3>
+    </div>
+    <div class="host-note">
+      選擇主持人後，系統會在第一頁添加金色大字體的主持人顯示區塊
+    </div>
+    <div class="host-controls">
+      <select id="host-select" class="host-select">
+        <option value="">-- 請選擇主持人 --</option>
+      </select>
+      <button id="set-host-btn" class="host-btn">
+        <i class="fas fa-check"></i> 設置主持人
+      </button>
+      <button id="clear-host-btn" class="host-btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+        <i class="fas fa-times"></i> 清除主持人
+      </button>
+    </div>
+  </div>
+  
+  <div id="editor-container"></div>
+  
+  <div class="action-buttons">
+    <button id="save-btn" class="action-btn save">
+      <i class="fas fa-save"></i> 保存變更
+    </button>
+    <button id="close-btn" class="action-btn close">
+      <i class="fas fa-times"></i> 關閉編輯器
+    </button>
+  </div>
+
+  <script type="module">
+    import { renderPageEditor } from './components/page-editor.js';
+    
+    const HOST_LIST = [
+      "Elisa姊妹", "Doreen姊妹", "Grace姊妹", "Prarl姊妹",
+      "Sheri姊妹", "StephenS弟兄", "張弟兄", "李姊妹", "Daniel區長"
+    ];
+    
+    class PageEditorWrapper {
+      constructor() {
+        this.meetingData = null;
+        this.currentPageKey = 'page01';
+        this.currentPage = null;
+        this.init();
+      }
+      
+      async init() {
+        await this.loadMeetingData();
+        this.renderPageNumbers();
+        this.initHostSelect();
+        this.loadCurrentPage();
+        this.bindEvents();
+        console.log('✅ 编辑器初始化完成');
+      }
+      
+      async loadMeetingData() {
+        try {
+          const response = await fetch('../data/meeting.json');
+          this.meetingData = await response.json();
+        } catch (error) {
+          console.error('加载数据失败:', error);
+        }
+      }
+      
+      renderPageNumbers() {
+        const container = document.getElementById('page-numbers');
+        if (!container || !this.meetingData) return;
+        
+        container.innerHTML = '';
+        const pageKeys = Object.keys(this.meetingData.pages).sort((a, b) => {
+          return parseInt(a.replace('page', '')) - parseInt(b.replace('page', ''));
+        });
+        
+        pageKeys.forEach(key => {
+          const pageNum = key.replace('page', '');
+          const btn = document.createElement('button');
+          btn.className = 'page-number-btn';
+          btn.textContent = pageNum;
+          btn.title = this.meetingData.pages[key].title || `第 ${pageNum} 頁`;
+          btn.dataset.pageKey = key;
+          
+          if (key === this.currentPageKey) {
+            btn.classList.add('active');
+          }
+          
+          btn.addEventListener('click', () => {
+            this.switchToPage(key);
+          });
+          
+          container.appendChild(btn);
+        });
+      }
+      
+      initHostSelect() {
+        const select = document.getElementById('host-select');
+        if (!select) return;
+        
+        select.innerHTML = '<option value="">-- 請選擇主持人 --</option>';
+        HOST_LIST.forEach(host => {
+          const option = document.createElement('option');
+          option.value = host;
+          option.textContent = host;
+          select.appendChild(option);
+        });
+      }
+      
+      switchToPage(pageKey) {
+        if (this.currentPage) {
+          this.meetingData.pages[this.currentPageKey] = this.currentPage;
+        }
+        
+        this.currentPageKey = pageKey;
+        this.currentPage = JSON.parse(JSON.stringify(this.meetingData.pages[pageKey]));
+        
+        document.querySelectorAll('.page-number-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.pageKey === pageKey);
+        });
+        
+        const pageNum = pageKey.replace('page', '');
+        document.getElementById('current-page-info').textContent = 
+          `編輯第 ${pageNum} 頁: ${this.currentPage.title || '未命名頁面'}`;
+        
+        document.getElementById('page-subtitle').textContent = 
+          pageKey === 'page01' ? '編輯第一頁 - 可設置主持人' : `編輯第 ${pageNum} 頁`;
+        
+        document.getElementById('host-section').style.display = 
+          pageKey === 'page01' ? 'block' : 'none';
+        
+        this.loadCurrentPage();
+      }
+      
+      loadCurrentPage() {
+        if (!this.currentPage) return;
+        
+        if (typeof renderPageEditor === 'function') {
+          const pageForEditor = JSON.parse(JSON.stringify(this.currentPage));
+          if (!pageForEditor.sections) pageForEditor.sections = [];
+          if (!pageForEditor.style) pageForEditor.style = {};
+          
+          renderPageEditor(pageForEditor, (updatedPage) => {
+            this.currentPage = updatedPage;
+            this.meetingData.pages[this.currentPageKey] = updatedPage;
+          });
+        }
+      }
+      
+      setHostForPage(hostName) {
+        if (this.currentPageKey !== 'page01') {
+          alert('只能在第一页设置主持人');
+          return;
+        }
+        
+        if (!this.currentPage.sections) this.currentPage.sections = [];
+        
+        const hostSection = {
+          type: "text",
+          content: `主持：${hostName}`,
+          style: {
+            fontSize: "60px",
+            textAlign: "center",
+            color: "#f1c40f",
+            textShadow: "0 0 10px rgba(241, 196, 15, 0.5)"
+          }
+        };
+        
+        let hostIndex = -1;
+        this.currentPage.sections.forEach((section, index) => {
+          if (section.content && section.content.includes('主持：')) {
+            hostIndex = index;
+          }
+        });
+        
+        if (hostIndex >= 0) {
+          this.currentPage.sections[hostIndex] = hostSection;
+        } else {
+          this.currentPage.sections.splice(1, 0, hostSection);
+        }
+        
+        this.loadCurrentPage();
+        alert(`主持人已設置為: ${hostName}`);
+      }
+      
+      clearHost() {
+        if (this.currentPageKey !== 'page01') return;
+        
+        if (this.currentPage.sections) {
+          this.currentPage.sections = this.currentPage.sections.filter(section => {
+            return !section.content || !section.content.includes('主持：');
+          });
+          this.loadCurrentPage();
+          document.getElementById('host-select').value = '';
+        }
+      }
+      
+      bindEvents() {
+        document.getElementById('set-host-btn').addEventListener('click', () => {
+          const hostSelect = document.getElementById('host-select');
+          this.setHostForPage(hostSelect.value);
+        });
+        
+        document.getElementById('clear-host-btn').addEventListener('click', () => {
+          this.clearHost();
+        });
+        
+        document.getElementById('save-btn').addEventListener('click', () => {
+          if (window.parent) {
+            window.parent.postMessage({
+              type: 'save-page',
+              pageKey: this.currentPageKey,
+              pageData: this.currentPage
+            }, '*');
+            alert('✅ 頁面已保存');
+          }
+        });
+        
+        document.getElementById('close-btn').addEventListener('click', () => {
+          if (window.parent) {
+            window.parent.postMessage({ type: 'close-editor' }, '*');
+          }
+        });
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      window.pageEditor = new PageEditorWrapper();
+    });
+    
+    window.addEventListener('message', (e) => {
+      if (e.data.type === 'load-page' && window.pageEditor) {
+        window.pageEditor.switchToPage(e.data.pageKey);
+      }
+    });
+  </script>
+</body>
+</html>
