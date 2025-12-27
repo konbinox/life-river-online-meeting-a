@@ -1,0 +1,149 @@
+/* 侧边栏容器 */
+#sidebar {
+  width: 280px;
+  background: rgba(20, 20, 30, 0.95);
+  backdrop-filter: blur(15px);
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-right: 3px solid rgba(241, 196, 15, 0.4);
+  box-shadow: 5px 0 20px rgba(0,0,0,0.5);
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+#sidebar-title {
+  font-size: 22px;
+  color: #f1c40f;
+  margin: 0 0 30px 0;
+  padding-bottom: 18px;
+  border-bottom: 2px solid rgba(241, 196, 15, 0.3);
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  letter-spacing: 1px;
+}
+
+/* 导航项 */
+.nav-number {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  min-height: 75px;
+}
+
+.nav-number:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(241, 196, 15, 0.3);
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.nav-number.active {
+  background: linear-gradient(135deg, 
+    rgba(241, 196, 15, 0.18), 
+    rgba(230, 126, 34, 0.1));
+  border-color: #f1c40f;
+  box-shadow: 0 0 25px rgba(241, 196, 15, 0.25),
+              inset 0 0 20px rgba(241, 196, 15, 0.1);
+}
+
+.nav-number.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 70%;
+  background: linear-gradient(to bottom, #f1c40f, #e67e22);
+  border-radius: 0 3px 3px 0;
+}
+
+/* 编号圆圈 */
+.number-circle {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #f1c40f, #e67e22);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  margin-right: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(241, 196, 15, 0.4);
+  transition: all 0.3s ease;
+}
+
+.nav-number:hover .number-circle {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(241, 196, 15, 0.6);
+}
+
+.nav-number.active .number-circle {
+  background: linear-gradient(135deg, #fff, #f9f9f9);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+  color: #000;
+}
+
+/* 导航内容 */
+.nav-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.nav-number.active .nav-title {
+  color: #f1c40f;
+  text-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+}
+
+.nav-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.4;
+}
+
+.nav-number.active .nav-desc {
+  color: rgba(241, 196, 15, 0.9);
+}
+
+/* 滚动条美化 */
+#sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+  background: rgba(241, 196, 15, 0.4);
+  border-radius: 4px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(241, 196, 15, 0.6);
+}

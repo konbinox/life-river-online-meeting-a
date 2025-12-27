@@ -1,0 +1,25 @@
+{
+  "hosts": [
+    "Elisa姊妹",
+    "Doreen姊妹",
+    "Grace姊妹",
+    "Prarl姊妹",
+    "Sheri姊妹",
+    "StephenS弟兄",
+    "張弟兄",
+    "李姊妹",
+    "Daniel區長"
+  ],
+  "schedule": [
+    {
+      "date": "2025-10-04",
+      "host": "Doreen姊妹"
+    },
+    {
+      "date": "2025-10-11", 
+      "host": "Sheri姊妹"
+    }
+  ],
+  "currentHost": "Doreen姊妹",
+  "lastUpdated": "2025-10-04T10:00:00Z"
+}
